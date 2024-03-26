@@ -17,7 +17,7 @@ export const Button = (props: ButtonProps) => {
 
   switch (props.variation) {
     case "border":
-      theme = "bg-white border border-black text-primary hover:bg-[#1DB954]"
+      theme = "bg-white border border-black text-primary hover:bg-neutral-200"
       break;
     default:
       theme += "bg-primary text-neutral-100";
@@ -28,7 +28,7 @@ export const Button = (props: ButtonProps) => {
     <button
       className={`
       ${theme}
-      h-[38px] w-[118px] rounded-sm text-medium-14px
+      h-[38px] w-[118px] rounded-sm text-medium-14px 
       relative flex items-center justify-center
       disabled:bg-neutral-95 disabled:text-neutral-70
       `}

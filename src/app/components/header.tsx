@@ -24,7 +24,7 @@ export const Header = () => {
   const router = useRouter();
 
   return (
-    <div className="w-full px-[64px] py-2.5 border-b border-neutral-0">
+    <div className="w-full px-[64px] py-2.5 border-b border-neutral-900">
       <div className="w-full flex items-center justify-between">
         <div className="flex items-center gap-x-5">
           <Image

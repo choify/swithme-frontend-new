@@ -17,12 +17,32 @@
 }
 
 @layer components {
-  .text-medium-24px {
-    @apply text-[24px]/[29px] font-medium;
+  .main {
+    @apply flex flex-col items-center flex-grow;
+  }
+
+  .column {
+    @apply flex flex-col;
+  }
+
+  .text-semibold-56px {
+    @apply text-[56px]/[64px] font-semibold;
+  }
+
+  .text-medium-56px {
+    @apply text-[56px]/[64px] font-medium;
+  }
+
+  .text-normal-56px {
+    @apply text-[56px]/[64px] font-normal;
   }
 
   .text-semibold-24px {
     @apply text-[24px]/[29px] font-semibold;
+  }
+
+  .text-medium-24px {
+    @apply text-[24px]/[29px] font-medium;
   }
 
   .text-normal-24px {
@@ -33,20 +53,72 @@
     @apply text-[20px]/[24px] font-semibold;
   }
 
-  .text-normal-16px {
-    @apply text-[16px]/[19px] font-normal;
+  .text-medium-20px {
+    @apply text-[20px]/[24px] font-medium;
+  }
+
+  .text-normal-20px {
+    @apply text-[20px]/[24px] font-normal;
+  }
+
+  .text-semibold-18px {
+    @apply text-[18px]/[22px] font-semibold;
+  }
+
+  .text-medium-18px {
+    @apply text-[18px]/[22px] font-medium;
+  }
+
+  .text-normal-18px {
+    @apply text-[18px]/[22px] font-normal;
+  }
+
+  .text-semibold-16px {
+    @apply text-[16px]/[19px] font-semibold;
   }
 
   .text-medium-16px {
     @apply text-[16px]/[19px] font-medium;
   }
 
+  .text-normal-16px {
+    @apply text-[16px]/[19px] font-normal;
+  }
+
+  .text-semibold-14px {
+    @apply text-[14px]/[17px] font-semibold;
+  }
+
+  .text-medium-14px {
+    @apply text-[14px]/[17px] font-medium;
+  }
+
   .text-normal-14px {
     @apply text-[14px]/[17px] font-normal;
   }
 
-  .text-medium-14px {
-    @apply text-[14px]/[20px] font-medium;
+  .text-semibold-12px {
+    @apply text-[12px]/[15px] font-semibold;
+  }
+
+  .text-medium-12px {
+    @apply text-[12px]/[15px] font-medium;
+  }
+
+  .text-normal-12px {
+    @apply text-[12px]/[15px] font-normal;
+  }
+
+  .text-semibold-9px {
+    @apply text-[9px]/[12px] font-semibold;
+  }
+
+  .text-medium-9px {
+    @apply text-[9px]/[12px] font-medium;
+  }
+
+  .text-normal-9px {
+    @apply text-[9px]/[12px] font-normal;
   }
 }
 
