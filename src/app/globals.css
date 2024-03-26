@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 * {
   font-family: var(--font);
   font-weight: 400;

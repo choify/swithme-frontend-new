@@ -5,6 +5,7 @@ import search from "/public/images/search.png";
 import Image from "next/image";
 import {useRouter} from "next/navigation";
 import {Button} from "@/app/components/button";
+import Link from "next/link";
 
 const nav = [
   {
@@ -56,12 +57,14 @@ export const Header = () => {
             alt={"search"}
             width={24}
             height={24} />
-          <Button
-            type="button"
-            variation="border"
-          >
-            로그인 / 가입
-          </Button>
+          <Link href={"/signin"}>
+            <Button
+              type="button"
+              variation="border"
+            >
+              로그인 / 가입
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
