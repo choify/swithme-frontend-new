@@ -37,6 +37,30 @@
     @apply text-[56px]/[64px] font-normal;
   }
 
+  .text-semibold-36px {
+    @apply text-[36px]/[42px] font-semibold;
+  }
+
+  .text-medium-36px {
+    @apply text-[36px]/[42px] font-medium;
+  }
+
+  .text-normal-36px {
+    @apply text-[36px]/[42px] font-normal;
+  }
+
+  .text-semibold-32px {
+    @apply text-[32px]/[38px] font-semibold;
+  }
+
+  .text-medium-32px {
+    @apply text-[32px]/[38px] font-medium;
+  }
+
+  .text-normal-32px {
+    @apply text-[32px]/[48px] font-normal;
+  }
+
   .text-semibold-24px {
     @apply text-[24px]/[29px] font-semibold;
   }
