@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import StudyCard, { Study } from "../components/StudyCard";
 import StudyHeader from "../components/StudyHeader";
+import Link from "next/link";
 
 export interface Member {
   id: number;
@@ -31,7 +32,7 @@ export interface Category {
   child?: string;
 }
 
-const DummyMember: Member = {
+const dummyMember: Member = {
   id: 0,
   email: "",
   password: "",
@@ -49,9 +50,9 @@ const DummyMember: Member = {
   authority: "ROLE_USER",
 };
 
-const DummyStudy: Study = {
+const dummyStudy: Study = {
   studyId: 0,
-  member: DummyMember,
+  member: dummyMember,
   title: "스터디 이름",
   studyType: "ONLINE",
   numberOfMember: 0,
@@ -77,7 +78,7 @@ interface StudyRequest {
 
 const Recruit = () => {
   const [studyList, setStudyList] = useState<Study[]>(
-    new Array(4).fill(DummyStudy)
+    new Array(4).fill(dummyStudy)
   );
 
   const getStudyList = async () => {
@@ -116,17 +117,23 @@ const Recruit = () => {
           title="스터디 그룹 모집"
           subs="나에게 맞는 스터디 그룹을 찾아보고 참여해보세요!"
         />
-        <nav className="flex justify-start items-center flex-grow-0 flex-shrink-0 w-[1440px] h-[104px] overflow-hidden gap-5 px-16 py-[30px] bg-white">
-          <div className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-2 px-5 py-1 rounded-[20px] bg-white border border-[#003324]">
-            <p className="flex-grow-0 flex-shrink-0 text-xl text-left text-[#003324]">
+        <nav className="flex justify-between items-center flex-grow-0 flex-shrink-0 w-[1440px] h-[104px] overflow-hidden gap-5 px-16 py-[30px] bg-white">
+          <div
+            id="filterSection"
+            className="w-fit h-fit flex justify-center items-center gap-2"
+          >
+            <div className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-2 px-5 py-1 rounded-[20px] bg-white border border-[#003324] text-[#003324] text-xl">
               지역
-            </p>
-          </div>
-          <div className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-2 px-5 py-1 rounded-[20px] bg-white border border-[#003324]">
-            <p className="flex-grow-0 flex-shrink-0 text-xl text-left text-[#003324]">
+            </div>
+            <div className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-2 px-5 py-1 rounded-[20px] bg-white border border-[#003324] text-[#003324] text-xl">
               주제
-            </p>
+            </div>
           </div>
+          <Link href="/register">
+            <div className="w-fit h-fit px-4 py-2 bg-[#003324] text-white text-xl rounded-2xl cursor-pointer">
+              스터디 추가
+            </div>
+          </Link>
         </nav>
         <div className="flex flex-col justify-center items-center flex-grow-0 flex-shrink-0 w-[1440px] gap-2.5 p-[60px] bg-white overflow-visible">
           <div className="grid grid-cols-2 flex-grow-0 flex-shrink-0 w-[1320px] h-[1239px] overflow-hidden gap-5">
