@@ -12,11 +12,11 @@ export type TextareaProps = DetailedHTMLProps<
 
 export const Input = (props: {
   variant?: "signin";
-  textarea?: boolean;
   label?: ReactNode;
   className?: string;
   inputProps?: InputProps;
   textareaProps?: TextareaProps;
+  error?: string;
 }) => {
   const placeholder = "placeholder:text-body-s1 placeholder:text-neutral-400";
   const focus = "focus:outline-none";
@@ -42,8 +42,9 @@ export const Input = (props: {
       w-full flex items-center border ${borderColor}
       ${props.textareaProps ? "min-h-[160px]" : ""} ${rounded}
       focus-within:border-[2px] focus-within:${borderColor}
+      ${props.error ? "border-red-700" : ""}
       `}>
-        {props.textarea && (
+        {props.textareaProps && (
           <textarea
             className={`w-full self-stretch p-4 whitespace-pre-wrap resize-none
             ${font} ${rounded} ${placeholder} ${focus} ${
@@ -53,7 +54,7 @@ export const Input = (props: {
           />
         )}
 
-        {!props.textarea && (
+        {props.inputProps && (
           <input
             {...props.inputProps}
             className={`w-full hide-number-buttons p-4
@@ -63,6 +64,15 @@ export const Input = (props: {
           />
         )}
       </div>
+      {props.error && <InputError>{props.error}</InputError>}
     </div>
+  );
+};
+
+export const InputError = ({ children }: { children: ReactNode }) => {
+  return (
+    <span className="flex text-medium-12px text-red-700 mt-2">
+      {children}
+    </span>
   );
 };
