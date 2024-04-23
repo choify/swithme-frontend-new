@@ -90,7 +90,7 @@ const Recruit = () => {
 
     const query = Object.keys(searchData).reduce(
       (acc, curr, i) =>
-        acc + (i === 0 ? "" : "&") + `${curr}=${searchData[curr]}`
+        acc + (i === 0 ? "" : "&") + `${curr}=${Object.values(curr)}`
     );
     console.log(query);
 
