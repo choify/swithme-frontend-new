@@ -31,6 +31,7 @@ export const Button = (props: ButtonProps) => {
     <button
       {...props}
       className={`
+      ${props.className}
       relative flex items-center justify-center
       ${theme} ${size}
       disabled:bg-neutral-300 disabled:text-neutral-500
