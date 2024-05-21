@@ -41,7 +41,7 @@ const getServersideProps: () => Promise<Study> = async () => {
   return studyData;
 };
 
-const RecruitDetail: NextPage<Props> = async () => {
+const GroupsDetail: NextPage<Props> = async () => {
   const studyData = await getServersideProps();
   return (
     <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 overflow-hidden gap-2.5 bg-white">
@@ -181,4 +181,4 @@ const RecruitDetail: NextPage<Props> = async () => {
   );
 };
 
-export default RecruitDetail;
+export default GroupsDetail;
