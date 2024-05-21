@@ -1,48 +1,4 @@
-import { GetServerSideProps, NextPage } from "next";
-import { Member } from "../page";
-import { Study } from "../../components/StudyCard";
-
-interface Props {
-  studyData: Study;
-}
-
-const getServersideProps: () => Promise<Study> = async () => {
-  const dummyMember: Member = {
-    id: 0,
-    email: "",
-    password: "",
-    name: "",
-    nickname: "",
-    gender: "M",
-    birthdate: new Date(),
-    phone: "",
-    introduce: "",
-    date_withdraw: 0,
-    withdraw: 0,
-    temperature: 0,
-    date_created: 0,
-    last_modified_date: 0,
-    authority: "ROLE_USER",
-  };
-
-  const studyData: Study = {
-    studyId: 0,
-    member: dummyMember,
-    title: "스터디 이름",
-    studyType: "ONLINE",
-    numberOfMember: 0,
-    studyInfo:
-      "스터디 설명은 트룬케이트를 써서 쩜쩜쩜으로 끝나도로고 하는 것이 한 줄로 해서 보는 게 제일 좋아 보입니다. 아무래도 그렇지 않을까요?",
-    studyStatus: "CURR",
-    dateCreated: 0,
-    lastModifiedDate: 0,
-  };
-
-  return studyData;
-};
-
-const GroupsDetail: NextPage<Props> = async () => {
-  const studyData = await getServersideProps();
+const GroupsDetail = () => {
   return (
     <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 overflow-hidden gap-2.5 bg-white">
       <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 w-[1440px] overflow-hidden gap-5 px-16 pt-[60px] pb-[30px] bg-white">
@@ -50,10 +6,10 @@ const GroupsDetail: NextPage<Props> = async () => {
           <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 gap-4">
             <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 relative gap-6">
               <p className="self-stretch flex-grow-0 flex-shrink-0 w-[1203px] text-[56px] font-bold text-left text-black">
-                {studyData?.title}
+                스터디 이름
               </p>
               <p className="self-stretch flex-grow-0 flex-shrink-0 w-[1203px] text-lg text-left text-black">
-                {studyData?.studyInfo}
+                스터디 설명은 트룬케이트를 써서 쩜쩜쩜으로 끝나도로고 하는 것이 한 줄로 해서 보는 게 제일 좋아 보입니다. 아무래도 그렇지 않을까요?
               </p>
             </div>
             <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 overflow-hidden gap-2.5">
