@@ -3,11 +3,9 @@
 import {Form} from "@/app/components/form";
 import {Input} from "@/app/components/input";
 import {Button} from "@/app/components/button";
-import Link from "next/link";
-import {object, string, number, date, InferType, mixed, ref} from 'yup';
+import {object, string, InferType, ref} from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import dayjs from "dayjs";
-import {useCallback} from "react";
+import {useCallback, useEffect} from "react";
 import {useForm} from "react-hook-form";
 import {Selector} from "@/app/components/selector";
 
@@ -20,6 +18,7 @@ const userSchema = object({
   password: string().required("비밀번호를 입력해주세요."),
   passwordConfirm: string().oneOf([ref('password')], "비밀번호가 일치하지 않습니다.").required("비밀번호를 다시 입력해주세요."),
   phone: string().required("전화번호를 입력해주세요."),
+  birthdate: string().required("생년월일을 입력해주세요."),
 });
 
 interface Form extends InferType<typeof userSchema> {
@@ -31,6 +30,7 @@ interface Form extends InferType<typeof userSchema> {
   password: string;
   passwordConfirm: string;
   phone: string;
+  birthdate: string;
 }
 
 const defaultValues: Form = {
@@ -42,6 +42,7 @@ const defaultValues: Form = {
   password: "",
   passwordConfirm: "",
   phone: "",
+  birthdate: "2024-02-02",
 }
 
 const SignUpPage = () => {
@@ -52,10 +53,38 @@ const SignUpPage = () => {
 
   const onSubmit = useCallback(async (data: Form) => {
     try {
-      alert("회원가입 완료");
-    }catch (error) {
+      const response = await fetch('/api/signup', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "회원가입에 실패하였습니다.");
+      }
+
+      alert("회원가입이 완료되었습니다.");
+      console.log(response);
+
+    } catch (error) {
+      console.log(error);
+      alert(error);
     }
+  }, []);
+
+  const getData = useCallback(async () => {
+    const res = await fetch('https://jsonplaceholder.typicode.com/posts/1')
+      .then((response) => response.json())
+      .then((json) => console.log(json));
+
+    console.log(res);
+  }, []);
+
+  useEffect( () => {
+    getData();
   }, []);
 
   return (

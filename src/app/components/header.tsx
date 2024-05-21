@@ -10,14 +10,16 @@ import Link from "next/link";
 const nav = [
   {
     name: "스터디 모집",
-    path: "/",
-  },  {
-    name: "스터디 현황",
-    path: "/",
-  },  {
-    name: "내 스터디",
-    path: "/",
+    path: "/recruit",
   },
+  // {
+  //   name: "스터디 현황",
+  //   path: "/",
+  // },
+  // {
+  //   name: "내 스터디",
+  //   path: "/",
+  // },
 ];
 
 export const Header = () => {
