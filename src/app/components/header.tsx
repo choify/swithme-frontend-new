@@ -7,7 +7,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {Button} from "@/app/components/button";
 import Link from "next/link";
 import {useAuthStore} from "@/app/store/authStore";
-import { Suspense } from 'react';
+import {Suspense} from 'react';
 
 const nav = [
   {
@@ -40,57 +40,60 @@ export const Header = () => {
   const type = searchParams.get('type');
 
   const onClick = () => {
-    if(logged) {
+    if (logged) {
       setLogged(false);
-    }else{
+    } else {
       router.push("/signin");
     }
   }
 
   return (
-    <div className="w-full px-[64px] py-2.5 border-b border-neutral-900">
-      <div className="w-full flex items-center justify-between">
-        <div className="flex items-center gap-x-5">
-          <Image
-            onClick={() => {
-              router.push("/");
-            }}
-            src={logo}
-            alt={"logo"}
-            width={127}
-            height={43}
-            className="cursor-pointer"
-          />
-          {nav.map((e, i)=>(
-            <Suspense key={i} fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Loading...</div>}>
+
+      <div className="w-full px-[64px] py-2.5 border-b border-neutral-900">
+        <div className="w-full flex items-center justify-between">
+          <div className="flex items-center gap-x-5">
+            <Image
+              onClick={() => {
+                router.push("/");
+              }}
+              src={logo}
+              alt={"logo"}
+              width={127}
+              height={43}
+              className="cursor-pointer"
+            />
+            {nav.map((e, i) => (
               <div
-                onClick={()=>{
+                key={i}
+                onClick={() => {
                   router.push(e.path);
                 }}
                 className={`cursor-pointer ${e.type === type ? "text-semibold-18px" : "text-semibold-16px"} text-lime-800 hover:text-semibold-18px`}
               >
                 {e.name}
               </div>
-            </Suspense>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        <div className="flex items-center gap-x-5">
-          <Image
-            className="cursor-pointer"
-            src={search}
-            alt={"search"}
-            width={24}
-            height={24} />
-          <Button
-            type="button"
-            variation="border"
-            onClick={onClick}
-          >
-            {logged ? "로그아웃" : "로그인 / 가입"}
-          </Button>
+          <div className="flex items-center gap-x-5">
+            <Image
+              className="cursor-pointer"
+              src={search}
+              alt={"search"}
+              width={24}
+              height={24}/>
+            <Button
+              type="button"
+              variation="border"
+              onClick={onClick}
+            >
+              {logged ? "로그아웃" : "로그인 / 가입"}
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </Suspense>
+
   );
 };
