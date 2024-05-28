@@ -28,7 +28,7 @@ const userSchema = object({
 const SignInPage = () => {
   const setLogged = useAuthStore((state) => state.setLogged);
   const router = useRouter();
-  
+
   const form = useForm<Form>({
     defaultValues,
     resolver: yupResolver(userSchema),

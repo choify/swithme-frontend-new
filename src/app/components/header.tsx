@@ -7,6 +7,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {Button} from "@/app/components/button";
 import Link from "next/link";
 import {useAuthStore} from "@/app/store/authStore";
+import { Suspense } from 'react';
 
 const nav = [
   {
@@ -61,15 +62,16 @@ export const Header = () => {
             className="cursor-pointer"
           />
           {nav.map((e, i)=>(
-            <div
-              onClick={()=>{
-                router.push(e.path);
-              }}
-              key={i}
-              className={`cursor-pointer ${e.type === type ? "text-semibold-18px" : "text-semibold-16px"} text-lime-800 hover:text-semibold-18px`}
-            >
-              {e.name}
-            </div>
+            <Suspense key={i} fallback={<div>Loading...</div>}>
+              <div
+                onClick={()=>{
+                  router.push(e.path);
+                }}
+                className={`cursor-pointer ${e.type === type ? "text-semibold-18px" : "text-semibold-16px"} text-lime-800 hover:text-semibold-18px`}
+              >
+                {e.name}
+              </div>
+            </Suspense>
           ))}
         </div>
 
