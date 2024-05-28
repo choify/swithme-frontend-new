@@ -8,6 +8,8 @@ import {useRouter} from "next/navigation";
 import {useForm} from "react-hook-form";
 import {object, ref, string} from "yup";
 import {yupResolver} from "@hookform/resolvers/yup";
+import {useCallback, useState} from "react";
+import {useAuthStore} from "@/app/store/authStore";
 
 interface Form {
   email: string;
@@ -24,24 +26,44 @@ const userSchema = object({
 });
 
 const SignInPage = () => {
+  const setLogged = useAuthStore((state) => state.setLogged);
+  const router = useRouter();
+  
   const form = useForm<Form>({
     defaultValues,
     resolver: yupResolver(userSchema),
   });
 
-  const onSubmit = async (data: Form) => {
-    if (data.email === "" || data.email === null) {
+  const onSubmit = useCallback( async (formData: Form) => {
+    if (formData.email === "" || formData.email === null) {
       alert("이메일을 입력해 주세요.");
       return;
     }
 
-    if (data.password === "" || data.password === null) {
+    if (formData.password === "" || formData.password === null) {
       alert("비밀번호를 입력해 주세요.");
       return;
     }
 
-    window.location.replace("/");
-  }
+    const response = await fetch('/api/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: formData.email,
+        password: formData.password
+      })
+    });
+
+    if (response.status >= 400) {
+      alert(`아이디 또는 비밀번호가 일치하지 않습니다.`);
+    } else {
+      alert(`로그인 성공`);
+      setLogged(true);
+      router.push("/");
+    }
+  }, []);
 
   return (
     <div className="w-full flex items-center justify-center">

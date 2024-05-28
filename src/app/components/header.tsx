@@ -6,20 +6,21 @@ import Image from "next/image";
 import {useRouter, useSearchParams} from "next/navigation";
 import {Button} from "@/app/components/button";
 import Link from "next/link";
+import {useAuthStore} from "@/app/store/authStore";
 
 const nav = [
   {
-    name: "전체 스터디그룹",
+    name: "전체 스터디",
     type: "ALL",
     path: "/groups?type=ALL",
   },
   {
-    name: "온라인 스터디그룹",
+    name: "온라인 스터디",
     type: "ONLINE",
     path: "/groups?type=ONLINE",
   },
   {
-    name: "오프라인 스터디그룹",
+    name: "오프라인 스터디",
     type: "OFFLINE",
     path: "/groups?type=OFFLINE",
   },
@@ -32,8 +33,18 @@ const nav = [
 export const Header = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const logged = useAuthStore((state) => state.logged);
+  const setLogged = useAuthStore((state) => state.setLogged);
 
   const type = searchParams.get('type');
+
+  const onClick = () => {
+    if(logged) {
+      setLogged(false);
+    }else{
+      router.push("/signin");
+    }
+  }
 
   return (
     <div className="w-full px-[64px] py-2.5 border-b border-neutral-900">
@@ -69,14 +80,13 @@ export const Header = () => {
             alt={"search"}
             width={24}
             height={24} />
-          <Link href={"/signin"}>
-            <Button
-              type="button"
-              variation="border"
-            >
-              로그인 / 가입
-            </Button>
-          </Link>
+          <Button
+            type="button"
+            variation="border"
+            onClick={onClick}
+          >
+            {logged ? "로그아웃" : "로그인 / 가입"}
+          </Button>
         </div>
       </div>
     </div>

@@ -5,9 +5,12 @@ import {Input} from "@/app/components/input";
 import {Button} from "@/app/components/button";
 import {object, string, InferType, ref} from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {useCallback, useEffect} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {Selector} from "@/app/components/selector";
+import dayjs from "dayjs";
+import {router} from "next/client";
+import {useRouter} from "next/navigation";
 
 const userSchema = object({
   email: string().email("이메일 형식에 맞게 입력해주세요.").required("이메일을 입력해주세요."),
@@ -42,23 +45,39 @@ const defaultValues: Form = {
   password: "",
   passwordConfirm: "",
   phone: "",
-  birthdate: "2024-02-02",
+  birthdate: "",
 }
 
 const SignUpPage = () => {
+  const router = useRouter();
+  const [hasNicknameChecked, setHasNicknameChecked] = useState<boolean>(false);
   const form = useForm<Form>({
     defaultValues,
     resolver: yupResolver(userSchema),
   });
 
   const onSubmit = useCallback(async (data: Form) => {
+    if (!hasNicknameChecked) {
+      return alert("닉네임 중복 확인을 해주세요.");
+    }
+
     try {
-      const response = await fetch('/api/signup', {
+      const response = await fetch('http://3.37.237.39:8080/api/v1/auth/signup', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+          name: data.name,
+          nickname: data.nickname,
+          passwordConfirm: data.passwordConfirm,
+          gender: data.gender,
+          introduce: data.introduce,
+          phone: data.phone,
+          birthdate: dayjs(data.birthdate).format("YYYY-MM-DD"),
+        })
       });
 
       if (!response.ok) {
@@ -67,24 +86,39 @@ const SignUpPage = () => {
       }
 
       alert("회원가입이 완료되었습니다.");
+      router.push("/signin")
+
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
+  }, [hasNicknameChecked, router]);
+
+  const nicknameCheck = useCallback(async (nickname: string) => {
+    try {
+      const response = await fetch('http://3.37.237.39:8080/api/v1/auth/nickname/check', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nickname: nickname,
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return alert(errorData.message || "닉네임 확인에 실패하였습니다.");
+      }
+
+      alert("사용 가능한 닉네임 입니다.");
+      setHasNicknameChecked(true);
       console.log(response);
 
     } catch (error) {
       console.log(error);
       alert(error);
     }
-  }, []);
-
-  const getData = useCallback(async () => {
-    const res = await fetch('https://jsonplaceholder.typicode.com/posts/1')
-      .then((response) => response.json())
-      .then((json) => console.log(json));
-
-    console.log(res);
-  }, []);
-
-  useEffect( () => {
-    getData();
   }, []);
 
   return (
@@ -136,6 +170,28 @@ const SignUpPage = () => {
             error={form.formState.errors.passwordConfirm?.message}
           />
 
+          <div className="flex">
+            <Input
+              label={"닉네임"}
+              variant={"signin"}
+              inputProps={{
+                placeholder: "닉네임를 입력해주세요",
+                ...form.register("nickname"),
+                onKeyUp: () => setHasNicknameChecked(false),
+              }}
+              error={form.formState.errors.nickname?.message}
+            />
+            
+            <button
+              className="h-[53px] w-[120px] mt-9 rounded-md ml-2 text-semibold-14px bg-lime-800 hover:bg-lime-900 text-neutral-50"
+              onClick={() => nicknameCheck(form.watch("nickname"))}
+              type={"button"}
+            >
+              중복 확인
+            </button>
+          </div>
+          
+
           <Input
             label={"이름"}
             variant={"signin"}
@@ -144,16 +200,6 @@ const SignUpPage = () => {
               ...form.register("name"),
             }}
             error={form.formState.errors.name?.message}
-          />
-
-          <Input
-            label={"닉네임"}
-            variant={"signin"}
-            inputProps={{
-              placeholder: "닉네임를 입력해주세요",
-              ...form.register("nickname"),
-            }}
-            error={form.formState.errors.nickname?.message}
           />
 
           <Selector
@@ -165,6 +211,17 @@ const SignUpPage = () => {
             }}
             selectClassName={form.watch("gender") === "" ? "text-neutral-500" : ""}
             error={form.formState.errors.gender?.message}
+          />
+
+          <Input
+            label={"생년월일"}
+            variant={"signin"}
+            inputProps={{
+              placeholder: "이름를 입력해주세요",
+              ...form.register("birthdate"),
+              type: "date",
+            }}
+            error={form.formState.errors.birthdate?.message}
           />
 
           <Input
