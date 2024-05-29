@@ -1,6 +1,6 @@
 "use client";
 
-import {useRouter, useSearchParams} from "next/navigation";
+import {useRouter} from "next/navigation";
 import {Button} from "@/app/components/button";
 import Card from "@/app/components/card";
 import Plus from "/public/images/plus.png";
@@ -9,15 +9,13 @@ import { Suspense } from 'react';
 
 const Groups = () => {
   const router = useRouter();
-  const param = useSearchParams();
-  const type = param.get("type");
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className={"w-full column"}>
         <div className="w-full flex items-center justify-between mt-10">
             <h1 className="text-semibold-36px text-neutral-600">
-              <span className="text-lime-800">{type == "ONLINE" ? "온라인" : type === "OFFLINE" ? "오프라인" : "전체"}</span> 스터디
+              <span className="text-lime-800">{"전체"}</span> 스터디
             </h1>
 
           <button
