@@ -1,138 +1,176 @@
-const GroupsDetail = () => {
+"use client";
+
+import React, {useCallback, useEffect, useState} from "react";
+import {useRouter} from 'next/router';
+import {usePathname} from "next/navigation";
+import dayjs from "dayjs";
+import {getCookie} from "@/app/(main)/(study)/groups/register/page";
+
+const GroupsDetail = ({params}: { params: { id: number } }) => {
+  const [group, setGroup] = useState(null);
+  const pathname = usePathname();
+  const id = pathname.split('/').pop();
+  useEffect(() => {
+    const fetchGroup = async () => {
+      try {
+        const response = await fetch(`http://3.37.237.39:8080/api/v1/study/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setGroup(data.data);
+        } else {
+          throw new Error('Failed to fetch the group data');
+        }
+      } catch (error) {
+        console.error('Error fetching group:', error);
+      }
+    };
+
+    fetchGroup();
+  }, [id]);
+
+  const studyJoin = useCallback(async () => {
+    const token = getCookie('accessToken');
+
+    try {
+      const response = await fetch(`http://3.37.237.39:8080/api/v1/study/join/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : `Bearer ${token}`
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "스터디 참여 신청에 실패하였습니다.");
+      }
+
+      alert("스터디 참여 신청이 완료되었습니다.");
+    } catch (error) {
+      alert("스터디 참여 신청에 실패하였습니다.");
+      console.error('Error fetching group:', error);
+    }
+  }, []);
+
+  const addComment = useCallback(async () => {
+    const token = getCookie('accessToken');
+
+    try {
+      const response = await fetch(`http://3.37.237.39:8080/api/v1/study/comment/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "스터디 참여 신청에 실패하였습니다.");
+      }
+
+    } catch (error) {
+      console.error('Error fetching group:', error);
+    }
+  }, []);
+
+
+  if (!group) {
+    return <p>Loading...</p>;
+  }
+
   return (
-    <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 overflow-hidden gap-2.5 bg-white">
-      <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 w-[1440px] overflow-hidden gap-5 px-16 pt-[60px] pb-[30px] bg-white">
-        <div className="flex flex-col justify-start items-start flex-grow gap-6">
-          <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 gap-4">
-            <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 relative gap-6">
-              <p className="self-stretch flex-grow-0 flex-shrink-0 w-[1203px] text-[56px] font-bold text-left text-black">
-                스터디 이름
-              </p>
-              <p className="self-stretch flex-grow-0 flex-shrink-0 w-[1203px] text-lg text-left text-black">
-                스터디 설명은 트룬케이트를 써서 쩜쩜쩜으로 끝나도로고 하는 것이 한 줄로 해서 보는 게 제일 좋아 보입니다. 아무래도 그렇지 않을까요?
-              </p>
+    <div className="column w-full items-center">
+      <div className="w-1/2">
+        <h2 className="text-medium-56px text-neutral-700 mt-10">
+          스터디 정보
+        </h2>
+        <div className="flex items-center justify-between py-2 border-b-neutral-400 border-b-2 gap-x-5 mt-20">
+          <div className="flex items-center gap-x-2">
+            <div className="px-2 py-0.5 text-medium-24px border-2 border-neutral-400 text-neutral-500 rounded-md">
+              {group.studyStatus === "CURR" ? "모집중" : "진행중"}
             </div>
-            <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 overflow-hidden gap-2.5">
-              <div className="flex flex-col justify-start items-center flex-grow-0 flex-shrink-0 relative overflow-hidden px-2.5 py-[5px] rounded-[10px] border border-[#027a48]">
-                <p className="flex-grow-0 flex-shrink-0 text-lg font-bold text-center text-black">
-                  강남구 서초동
-                </p>
-              </div>
-              <div className="flex flex-col justify-start items-center flex-grow-0 flex-shrink-0 relative overflow-hidden gap-2.5 px-2.5 py-[5px] rounded-[10px] border border-[#027a48]">
-                <p className="flex-grow-0 flex-shrink-0 text-lg font-bold text-center text-black">
-                  개발 - 프론트엔드
-                </p>
-              </div>
-              <div className="flex flex-col justify-start items-center flex-grow-0 flex-shrink-0 relative overflow-hidden gap-2.5 px-2.5 py-[5px] rounded-[10px] border border-[#027a48]">
-                <p className="flex-grow-0 flex-shrink-0 text-lg font-bold text-center text-black">
-                  40 / 50명
-                </p>
-              </div>
+            <h3 className="text-semibold-36px text-neutral-800">
+              {group.title}
+            </h3>
+          </div>
+          <div className="flex items-center gap-x-2">
+            <div className="px-2 py-0.5 text-medium-24px border-2 border-neutral-400 text-neutral-500 rounded-md">
+              {group.studyType === "OFFLINE" ? "오프라인" : "온라인"}
+            </div>
+            <div className="px-2 py-0.5 text-medium-24px border-2 border-neutral-400 text-neutral-500 rounded-md">
+              서울, 강서
+            </div>
+            <div className="px-2 py-0.5 text-medium-24px border-2 border-neutral-400 text-neutral-500 rounded-md">
+              {`${group.remainingNumber} | ${group.numberOfMembers} 명`}
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-center items-center flex-grow-0 flex-shrink-0 relative overflow-hidden gap-2.5 px-[11px] py-[19px] rounded-sm bg-[#027a48]">
-          <p className="flex-grow-0 flex-shrink-0 text-lg font-bold text-center text-white">
-            참여하기
-          </p>
+
+        <div className="flex items-center justify-end w-full mt-5">
+          <button
+            className="bg-lime-400 p-5 rounded-md text-semibold-20px text-neutral-800 border border-lime-500 hover:bg-green-500"
+            type="button"
+            onClick={studyJoin}
+          >
+            스터디 참여하기
+          </button>
         </div>
-      </div>
-      <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 overflow-hidden gap-2.5 p-2.5">
-        <div className="flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-[717px] overflow-hidden px-[30px]">
-          <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 pr-[30px] py-[5px] border-t-2 border-r-0 border-b-0 border-l-0 border-[#027a48]">
-            <div className="flex flex-col justify-center items-center flex-grow-0 flex-shrink-0 w-[200px] relative overflow-hidden gap-2.5 p-2.5">
-              <p className="flex-grow-0 flex-shrink-0 text-base text-left text-[#027a48]">
-                지역
-              </p>
-            </div>
-            <div className="flex justify-start items-center self-stretch flex-grow relative overflow-hidden gap-2.5 p-2.5">
-              <p className="flex-grow w-[407px] text-base font-semibold text-left text-black">
-                성동구
-              </p>
-            </div>
+
+
+        <div className="grid grid-cols-5 gap-y-5 my-10 text-medium-18px">
+          <div className="py-5">
+            스터디장
           </div>
-          <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 pr-[30px] py-[5px] border-t-2 border-r-0 border-b-0 border-l-0 border-[#027a48]">
-            <div className="flex flex-col justify-center items-center flex-grow-0 flex-shrink-0 w-[200px] relative overflow-hidden gap-2.5 p-2.5">
-              <p className="flex-grow-0 flex-shrink-0 text-base text-left text-[#027a48]">
-                스터디 시간
-              </p>
-            </div>
-            <div className="flex justify-start items-center self-stretch flex-grow relative overflow-hidden gap-2.5 p-2.5">
-              <p className="flex-grow w-[407px] text-base font-semibold text-left text-black">
-                매주 화요일 오후 7시
-              </p>
-            </div>
+          <div className="col-span-4 flex items-center">
+            {group.createdMember.nickname}
           </div>
-          <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 pr-[30px] py-[5px] border-t-2 border-r-0 border-b-0 border-l-0 border-[#027a48]">
-            <div className="flex flex-col justify-center items-center flex-grow-0 flex-shrink-0 w-[200px] relative overflow-hidden gap-2.5 p-2.5">
-              <p className="flex-grow-0 flex-shrink-0 text-base text-left text-[#027a48]">
-                참여 인원 수
-              </p>
-            </div>
-            <div className="flex justify-start items-center self-stretch flex-grow relative overflow-hidden gap-2.5 p-2.5">
-              <p className="flex-grow w-[407px] text-base font-semibold text-left text-black">
-                4~5명
-              </p>
-            </div>
+          <div className="py-5">
+            스터디 기간
           </div>
-          <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 pr-[30px] py-[5px] border-2 border-[#027a48]">
-            <div className="flex flex-col justify-center items-center flex-grow-0 flex-shrink-0 w-[200px] relative overflow-hidden gap-2.5 p-2.5">
-              <p className="flex-grow-0 flex-shrink-0 text-base text-left text-[#027a48]">
-                목표
-              </p>
-            </div>
-            <div className="flex justify-start items-center self-stretch flex-grow relative overflow-hidden gap-2.5 p-2.5">
-              <p className="flex-grow w-[407px] text-base font-semibold text-left text-black">
-                취업합시다!
-              </p>
-            </div>
+          <div className="col-span-4 flex items-center">
+            {`${dayjs(group.dateStudyStart).format("YYYY.MM.DD")} - ${dayjs(group.dateStudyEnd).format("YYYY.MM.DD")}`}
+          </div>
+          <div className="py-5">
+            스터디 정보
+          </div>
+          <div className="col-span-4 flex items-center bg-neutral-100 border border-neutral-200 px-8 py-10 rounded-md">
+            <p className="text-medium-20px">
+              {group.studyInfo}
+            </p>
           </div>
         </div>
-        <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 overflow-hidden gap-2.5 p-2.5">
-          <div className="flex flex-col justify-start items-start flex-grow relative overflow-hidden gap-20 px-16 py-28 bg-white">
-            <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 relative gap-6">
-              <p className="flex-grow-0 flex-shrink-0 w-[616px] text-5xl font-bold text-left text-black">
-                Study Group Details
-              </p>
-              <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0">
-                <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 relative pb-4">
-                  <p className="self-stretch flex-grow-0 flex-shrink-0 w-[1272px] text-base text-left text-black">
-                    Morbi sed imperdiet in ipsum, adipiscing elit dui lectus.
-                    Tellus id scelerisque est ultricies ultricies. Duis est sit
-                    sed leo nisl, blandit elit sagittis. Quisque tristique
-                    consequat quam sed. Nisl at scelerisque amet nulla purus
-                    habitasse.
-                  </p>
-                </div>
-                <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 relative pb-4">
-                  <p className="self-stretch flex-grow-0 flex-shrink-0 w-[1272px] text-base text-left text-black">
-                    Nunc sed faucibus bibendum feugiat sed interdum. Ipsum
-                    egestas condimentum mi massa. In tincidunt pharetra
-                    consectetur sed duis facilisis metus. Etiam egestas in nec
-                    sed et. Quis lobortis at sit dictum eget nibh tortor commodo
-                    cursus.
-                  </p>
-                </div>
-                <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 relative">
-                  <p className="self-stretch flex-grow-0 flex-shrink-0 w-[1272px] text-base text-left text-black">
-                    Odio felis sagittis, morbi feugiat tortor vitae feugiat
-                    fusce aliquet. Nam elementum urna nisi aliquet erat dolor
-                    enim. Ornare id morbi eget ipsum. Aliquam senectus neque ut
-                    id eget consectetur dictum. Donec posuere pharetra odio
-                    consequat scelerisque et, nunc tortor. Nulla adipiscing erat
-                    a erat. Condimentum lorem posuere gravida enim posuere
-                    cursus diam.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <img
-              src="https://cdn.pixabay.com/photo/2015/07/19/10/00/school-work-851328_1280.jpg"
-              className="self-stretch flex-grow-0 flex-shrink-0 h-[738px] object-cover"
+
+        <div className="column border-t border-neutral-400 p-5">
+          <div className="flex items-center">
+            <input
+              className="w-full border-b border-b-neutral-300 p-2.5 my-5 focus:outline-none focus:border-b-neutral-800"
+              placeholder="댓글 추가하기"
             />
+            <button
+              className="w-20 py-2.5 bg-lime-400 rounded-2xl text-semibold-16px text-neutral-800 border border-lime-500 hover:bg-green-500">
+              댓글
+            </button>
           </div>
+
+          <div className="flex gap-x-5">
+            <div className="p-2 text-semibold-16px text-neutral-600">
+              닉네임
+            </div>
+            <div className="column">
+              <div className="p-5 border border-lime-200 bg-lime-50 rounded-xl">
+                이 스터디 정말 좋아요!
+              </div>
+              <div className="text-medium-12px flex items-end justify-end p-1">
+                2024.05.06 05:00:00
+              </div>
+            </div>
+          </div>
+
+
         </div>
       </div>
+
     </div>
   );
 };

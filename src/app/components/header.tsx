@@ -11,18 +11,18 @@ const nav = [
   {
     name: "전체 스터디",
     type: "ALL",
-    path: "/groups?type=ALL",
+    path: "/groups",
   },
-  {
-    name: "온라인 스터디",
-    type: "ONLINE",
-    path: "/groups?type=ONLINE",
-  },
-  {
-    name: "오프라인 스터디",
-    type: "OFFLINE",
-    path: "/groups?type=OFFLINE",
-  },
+  // {
+  //   name: "온라인 스터디",
+  //   type: "ONLINE",
+  //   path: "/groups?type=ONLINE",
+  // },
+  // {
+  //   name: "오프라인 스터디",
+  //   type: "OFFLINE",
+  //   path: "/groups?type=OFFLINE",
+  // },
   // {
   //   name: "내 스터디",
   //   path: "/",

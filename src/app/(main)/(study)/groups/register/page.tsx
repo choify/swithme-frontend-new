@@ -9,6 +9,8 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {Selector} from "@/app/components/selector";
 import {Button} from "@/app/components/button";
+import {useRouter} from "next/navigation";
+import dayjs from "dayjs";
 
 const userSchema = object({
   categoryId: string().required("카테고리를 선택해주세요."),
@@ -43,15 +45,62 @@ const defaultValues: Form = {
   title: "",
 }
 
+export function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  console.log("쿠키 값:", document.cookie);  // 쿠키 전체 출력
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    const cookieValue = parts.pop().split(';').shift();
+    console.log("찾은 쿠키 값:", cookieValue);  // 찾은 쿠키 값 출력
+    return cookieValue;
+  }
+  return null;  // 쿠키가 없는 경우 null 반환
+}
+
 const StudyRegister: NextPage = () => {
+  const router = useRouter();
   const form = useForm<Form>({
     defaultValues,
     resolver: yupResolver(userSchema),
   });
 
-  const onSubmit = useCallback(async (data: Form) => {
+  const onSubmit = useCallback(async (formData: Form) => {
+    const token = getCookie('accessToken');
 
-  }, []);
+    if(token === null){
+      return alert("로그인 정보가 없음");
+    }
+    console.log(token);
+    try {
+      const response = await fetch('http://3.37.237.39:8080/api/v1/study/register', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          categoryId: Number(formData.categoryId),
+          dateStudyEnd: dayjs(formData.dateStudyEnd).format('YYYYMMDD'),
+          dateStudyStart: dayjs(formData.dateStudyStart).format('YYYYMMDD'),
+          numberOfMembers: formData.numberOfMembers,
+          regionCode: formData.regionCode,
+          studyInfo: formData.studyInfo,
+          studyType: formData.studyType,
+          title: formData.title
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "그룹 생성에 실패하였습니다.");
+      }
+
+      alert("스터디그룹이 생성되었습니다.");
+      router.push("/groups");
+    } catch (error){
+      alert(error);
+    }
+  }, [router]);
 
   return (
     <div className="w-full flex justify-center flex-nowrap my-10">

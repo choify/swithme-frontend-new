@@ -14,7 +14,6 @@ const signInHandler = async (req: NextRequest) => {
     });
 
     const data = await fetchRes.json();
-    console.log(data);
 
     if(data.status !== 200) {
       return new NextResponse(JSON.stringify({ error: data.message }), { status: data.status });
@@ -25,14 +24,14 @@ const signInHandler = async (req: NextRequest) => {
     cookies().set({
       name: 'accessToken',
       value: data.data.accessToken,
-      httpOnly: true,
+      httpOnly: false,
       path: '/',
     });
 
     cookies().set({
       name: 'refreshToken',
       value: data.data.refreshToken,
-      httpOnly: true,
+      httpOnly: false,
       path: '/',
     });
 
