@@ -4,7 +4,6 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useRouter} from 'next/router';
 import {usePathname} from "next/navigation";
 import dayjs from "dayjs";
-import {getCookie} from "@/app/(main)/(study)/groups/register/page";
 
 const GroupsDetail = ({params}: { params: { id: number } }) => {
   const [group, setGroup] = useState(null);
@@ -53,7 +52,7 @@ const GroupsDetail = ({params}: { params: { id: number } }) => {
   }, []);
 
   const addComment = useCallback(async () => {
-    const token = getCookie('accessToken');
+    const token = localStorage.getItem('accessToken');
 
     try {
       const response = await fetch(`http://3.37.237.39:8080/api/v1/study/comment/${id}`, {
