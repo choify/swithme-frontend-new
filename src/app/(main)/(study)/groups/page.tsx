@@ -1,17 +1,30 @@
 "use client";
 
 import {useRouter} from "next/navigation";
-import {Button} from "@/app/components/button";
 import Card from "@/app/components/card";
 import Plus from "/public/images/plus.png";
 import Image from "next/image";
 import {useCallback, useEffect, useState} from "react";
 import dayjs from "dayjs";
-import {number} from "yup";
+
+export type Group = {
+  studyId: number;
+  studyStatus: string;
+  title: string;
+  studyInfo: string;
+  studyType: string;
+  numberOfMembers: number;
+  remainingNumber: number;
+  dateStudyStart: string;
+  dateStudyEnd: string;
+  createdMember: {
+    nickname: string;
+  };
+};
 
 const Groups = () => {
   const router = useRouter();
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState<Group[]>([]);
 
   const fetchData = useCallback(async () => {
     try {

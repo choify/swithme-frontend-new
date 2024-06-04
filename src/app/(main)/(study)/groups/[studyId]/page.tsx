@@ -1,12 +1,12 @@
 "use client";
 
 import React, {useCallback, useEffect, useState} from "react";
-import {useRouter} from 'next/router';
 import {usePathname} from "next/navigation";
 import dayjs from "dayjs";
+import {Group} from "@/app/(main)/(study)/groups/page";
 
 const GroupsDetail = ({params}: { params: { id: number } }) => {
-  const [group, setGroup] = useState(null);
+  const [group, setGroup] = useState<Group | null>(null);
   const pathname = usePathname();
   const id = pathname.split('/').pop();
   useEffect(() => {
