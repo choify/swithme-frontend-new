@@ -45,7 +45,7 @@ const SignInPage = () => {
       return;
     }
 
-    const response = await fetch('/api/signin', {
+    const response = await fetch('http://3.37.237.39:8080/api/v1/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -59,6 +59,9 @@ const SignInPage = () => {
     if (response.status >= 400) {
       alert(`아이디 또는 비밀번호가 일치하지 않습니다.`);
     } else {
+      const data = await response.json();
+      localStorage.setItem('accessToken', data.data.accessToken);
+      localStorage.setItem('refreshToken', data.data.refreshToken);
       alert(`로그인 성공`);
       setLogged(true);
       router.push("/");

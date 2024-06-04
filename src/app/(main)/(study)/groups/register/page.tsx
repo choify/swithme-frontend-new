@@ -45,18 +45,6 @@ const defaultValues: Form = {
   title: "",
 }
 
-export function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  console.log("쿠키 값:", document.cookie);  // 쿠키 전체 출력
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    const cookieValue = parts.pop().split(';').shift();
-    console.log("찾은 쿠키 값:", cookieValue);  // 찾은 쿠키 값 출력
-    return cookieValue;
-  }
-  return null;  // 쿠키가 없는 경우 null 반환
-}
-
 const StudyRegister: NextPage = () => {
   const router = useRouter();
   const form = useForm<Form>({
@@ -65,7 +53,7 @@ const StudyRegister: NextPage = () => {
   });
 
   const onSubmit = useCallback(async (formData: Form) => {
-    const token = getCookie('accessToken');
+    const token = localStorage.getItem('accessToken');
 
     if(token === null){
       return alert("로그인 정보가 없음");

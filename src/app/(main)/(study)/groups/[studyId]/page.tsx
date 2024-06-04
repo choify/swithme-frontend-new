@@ -29,7 +29,7 @@ const GroupsDetail = ({params}: { params: { id: number } }) => {
   }, [id]);
 
   const studyJoin = useCallback(async () => {
-    const token = getCookie('accessToken');
+    const token = localStorage.getItem('accessToken');
 
     try {
       const response = await fetch(`http://3.37.237.39:8080/api/v1/study/join/${id}`, {
