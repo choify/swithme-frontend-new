@@ -60,7 +60,7 @@ const StudyRegister: NextPage = () => {
     }
     console.log(token);
     try {
-      const response = await fetch('http://3.37.237.39:8080/api/v1/study/register', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/study/register`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',

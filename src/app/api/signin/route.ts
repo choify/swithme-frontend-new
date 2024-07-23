@@ -5,7 +5,7 @@ const signInHandler = async (req: NextRequest) => {
   const { email, password } = await req.json();
 
   try {
-    const fetchRes = await fetch('http://3.37.237.39:8080/api/v1/auth/login', {
+    const fetchRes = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

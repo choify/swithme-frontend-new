@@ -28,7 +28,7 @@ const Groups = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch('http://3.37.237.39:8080/api/v1/study', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/study`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -71,9 +71,9 @@ const Groups = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-5 justify-items-center mt-10">
-        {groups.length ? groups.map((e, i) => (
+        {groups.length ? groups.map((e) => (
           <Card
-            key={i}
+            key={e.studyId}
             studyId={e.studyId}
             title={e.title}
             studyStatus={e.studyStatus}

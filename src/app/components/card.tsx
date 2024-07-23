@@ -22,7 +22,7 @@ function Card(props:{
   const [star, setStar] = useState(false);
 
   const onClick = () => {
-    router.push(`/groups/${props.studyId}`);
+    router.push(`/groups/${props.studyId}/details`);
   }
   return (
     <div
